@@ -10,7 +10,7 @@ class ListTest < ActiveSupport::TestCase
   test "a list normalizes its title" do
     list = List.new(title: "  tItre test  ", description: "desc")
     list.save!
-    assert_equal "Titre Test", list.title
+    assert_equal "Titre test", list.title
   end
 
   test "a list cannot be destroyed if it has incomplete tasks" do

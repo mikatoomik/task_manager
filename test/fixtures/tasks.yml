@@ -5,9 +5,11 @@ one:
   description: MyText
   list: one
   position: 1
+  completed: false
 
 two:
   title: MyString
   description: MyText
   list: two
   position: 1
+  completed: false
