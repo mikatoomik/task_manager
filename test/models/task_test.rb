@@ -10,7 +10,7 @@ test "a task is invalid without a title" do
   test "a task normalizes its title" do
     task = Task.new(title: "  tItre tâche  ", description: "desc", list: lists(:one))
     task.save!
-    assert_equal "Titre Tâche", task.title
+    assert_equal "Titre tâche", task.title
   end
 
   test "title uniqueness within a list" do

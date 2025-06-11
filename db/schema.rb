@@ -26,6 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_064514) do
     t.text "description"
     t.bigint "list_id", null: false
     t.integer "position"
+    t.integer "priority", default: 0, null: false
     t.boolean "completed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

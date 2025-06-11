@@ -1,16 +1,18 @@
 class List < ApplicationRecord
-  before_save :normalize_title
+  include NormalizeTitle
+
   before_destroy :ensure_no_incomplete_tasks
 
   has_many :tasks, dependent: :destroy
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
 
-  private
-
-  def normalize_title
-    self.title = title.strip.capitalize if title.present?
+  def percent_complete
+    return 0 if tasks.count == 0
+    (tasks.completed.count.to_f / tasks.count * 100).round
   end
+
+  private
 
   def ensure_no_incomplete_tasks
     if tasks.incomplete.exists?
