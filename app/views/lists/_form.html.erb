@@ -1,0 +1,49 @@
+<div class="col">
+  <div class="card h-100 shadow-lg border-0 rounded-4 p-2">
+    <%= form_with(model: list, local: false) do |form| %>
+      <div class="card-body">
+        <% if list.errors.any? %>
+          <div class="errors">
+            <h4><%= pluralize(list.errors.count, "erreur") %> :</h4>
+            <ul>
+              <% list.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div>
+          <%= form.label :title, List.human_attribute_name(:title) %><br>
+          <%= form.text_field :title %>
+        </div>
+        <div>
+          <%= form.label :description, List.human_attribute_name(:description) %><br>
+          <%= form.text_area :description %>
+        </div>
+        <h4><%= t("lists.show.new_task") %> (optionnelle)</h4>
+        <%= form.fields_for :tasks do |task_fields| %>
+          <div style="border:1px solid #ccc; padding:0.5em; margin-bottom:1em;">
+            <div>
+              <%= task_fields.label :title, Task.human_attribute_name(:title) %><br>
+              <%= task_fields.text_field :title %>
+            </div>
+            <div>
+              <%= task_fields.label :description, Task.human_attribute_name(:description) %><br>
+              <%= task_fields.text_area :description %>
+            </div>
+            <div>
+              <%= task_fields.label :priority, Task.human_attribute_name(:priority) %><br>
+              <%= task_fields.select :priority, Task.priorities.keys.map { |k| [Task.human_attribute_name("priorities.#{k}"), k] } %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="card-footer bg-white d-flex justify-content-end gap-2">
+        <div>
+          <%= link_to t("actions.cancel"), list_path, class: "btn btn-outline-secondary btn-sm" %>
+          <%= form.submit %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

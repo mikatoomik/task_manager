@@ -1,0 +1,15 @@
+<turbo-frame id="list_card_<%= @list.id %>">
+  <div class="col">
+    <div class="card h-100 shadow-lg border-0 rounded-4 p-2">
+      <div class="card-body">
+        <h5 class="card-title mb-2"><%= @list.title %></h5>
+        <p class="card-text text-muted small"><%= @list.description %></p>
+        <p><strong><%= t("lists.show.progress", done: @list.tasks.completed.count, total: @list.tasks.count, percent: @list.percent_complete) %></strong></p>
+      </div>
+      <div class="card-footer bg-white d-flex justify-content-end gap-2">
+        <%= link_to t("lists.show.back"), lists_path, data: { turbo_frame: "_top" }, class: "btn btn-outline-secondary btn-sm" %>
+        <%= link_to t("lists.show.edit"), edit_list_path(@list), data: { turbo_frame: "list_card_#{@list.id}" }, class: "btn btn-outline-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

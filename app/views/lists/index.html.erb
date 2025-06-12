@@ -1,21 +1,13 @@
-<h1 class="m-2">My Lists</h1>
+<h1 class="m-2"><%= t("lists.index.title") %></h1>
 <% if @lists.any? %>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-3 mb-4">
     <% @lists.each do |list| %>
-      <div class="col">
-        <div class="card h-100 shadow-lg border-0 rounded-4 p-2">
-          <div class="card-body">
-            <h5 class="card-title mb-2"><%= link_to list.title, list_path(list), class: "stretched-link text-decoration-none text-dark" %></h5>
-            <% if list.respond_to?(:description) && list.description.present? %>
-              <p class="card-text text-muted small"><%= list.description %></p>
-            <% end %>
-          </div>
-          <div class="card-footer bg-white d-flex justify-content-end gap-2">
-            <%= link_to 'Edit', edit_list_path(list), class: "btn btn-outline-primary btn-sm" %>
-            <%= link_to 'Delete', list_path(list), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-outline-danger btn-sm" %>
-          </div>
-        </div>
-      </div>
+      <turbo-frame id="list_card_<%= list.id %>">
+        <%= render "lists/card", list: list %>
+      </turbo-frame>
     <% end %>
+    <turbo-frame id="new_list_card">
+      <%= render "lists/new_card" %>
+    </turbo-frame>
   </div>
 <% end %>

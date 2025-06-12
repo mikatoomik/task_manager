@@ -1,0 +1,73 @@
+fr:
+  actions:
+    cancel: "Annuler"
+  activerecord:
+    models:
+      list: "Liste"
+      task: "Tâche"
+    attributes:
+      list:
+        title: "Titre"
+        description: "Description"
+      task:
+        title: "Titre"
+        description: "Description"
+        completed: "Complétée"
+        priority: "Priorité"
+        priorities:
+          low: "Basse"
+          medium: "Moyenne"
+          high: "Haute"
+  helpers:
+    submit:
+      create: "Créer %{model}"
+      update: "Mettre à jour %{model}"
+  lists:
+    index:
+      title: "Mes listes"
+      new: "Nouvelle liste"
+      create_new_list_description: "Créez une nouvelle liste de tâches pour organiser votre travail."
+      no_lists: "Aucune liste trouvée."
+      completed_title: "complétées/total tâches complétées (pourcentage)"
+      completed: "%{done}/%{total} tâches complétées (%{percent}%)"
+      actions: "Actions"
+      edit: "Modifier"
+      destroy: "Supprimer"
+      confirm_destroy: "Supprimer cette liste ?"
+    show:
+      back: "Refermer"
+      edit: "Modifier"
+      tasks: "Tâches"
+      filter: "Filtrer :"
+      priority: "Priorité :"
+      all: "Toutes"
+      completed: "Complétées"
+      incomplete: "Incomplètes"
+      new_task: "Nouvelle tâche"
+      actions: "Actions"
+      edit_task: "Modifier"
+      destroy_task: "Supprimer"
+      confirm_destroy_task: "Supprimer cette tâche ?"
+      progress: "Avancement : %{done}/%{total} tâches complétées (%{percent}%)"
+  tasks:
+    form:
+      new: "Nouvelle tâche"
+      edit: "Modifier la tâche"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      blank: "ne peut pas être vide"
+      taken: "est déjà utilisé"
+      invalid: "n'est pas valide"
+  flash:
+    list_created: "Liste créée avec succès."
+    list_updated: "Liste mise à jour avec succès."
+    list_destroyed: "Liste supprimée."
+    task_created: "Tâche créée avec succès."
+    task_updated: "Tâche mise à jour."
+    task_destroyed: "Tâche supprimée."
+    cannot_destroy_list_with_incomplete_tasks: "Impossible de supprimer une liste avec des tâches incomplètes."
+  notices:
+    created: "Liste créée avec succès."
+    updated: "Liste mise à jour avec succès."
+    destroyed: "Liste supprimée."

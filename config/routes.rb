@@ -12,5 +12,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "lists#index"
 
-  resources :lists
+  resources :lists do
+    resources :tasks, except: [ :show ]
+    patch "tasks/:id/toggle", to: "tasks#toggle", as: :toggle_list_task
+  end
 end
