@@ -1,4 +1,14 @@
 <div class="col">
+  <% if list.errors.any? %>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <% list.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
   <div class="card h-100 shadow-lg border-0 rounded-4 p-2">
     <div class="card-body">
       <h5 class="card-title mb-2">
@@ -13,7 +23,7 @@
     <div class="card-footer bg-white d-flex justify-content-end gap-2">
       <div class="text-end mt-3">
         <%= link_to t("lists.index.edit"), edit_list_path(list), data: { turbo_frame: "list_card_#{list.id}" }, class: "btn btn-outline-primary btn-sm" %>
-        <%= link_to t("lists.index.destroy"), list_path(list), data: { turbo_method: :delete, turbo_confirm: t("lists.index.confirm_destroy"), turbo_frame: "_top" }, class: "btn btn-outline-danger btn-sm" %>
+        <%= link_to t("lists.index.destroy"), list_path(list), data: { turbo_method: :delete, turbo_confirm: t("lists.index.confirm_destroy"), turbo_frame: "list_card_#{list.id}" }, class: "btn btn-outline-danger btn-sm" %>
       </div>
     </div>
   </div>

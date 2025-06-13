@@ -18,6 +18,8 @@ class List < ApplicationRecord
 
   def ensure_no_incomplete_tasks
     if tasks.incomplete.exists?
+          Rails.logger.warn("[DEBUG] before_destroy blocked deletion")
+
       errors.add(:base, "Impossible de supprimer une liste avec des tâches incomplètes.")
       throw(:abort)
     end

@@ -1,0 +1,5 @@
+<% if @list.destroyed? %>
+  <%= turbo_stream.remove "list_card_#{@list.id}" %>
+<% else %>
+  <%= turbo_stream.replace "list_card_#{@list.id}", partial: "lists/card", locals: { list: @list } %>
+<% end %>

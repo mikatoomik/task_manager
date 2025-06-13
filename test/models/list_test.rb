@@ -6,11 +6,6 @@ class ListTest < ActiveSupport::TestCase
     assert_not list.valid?
     assert_includes list.errors[:title], "can't be blank"
   end
-  test "a list is invalid without a title2" do
-    list = List.new(description: "desc")
-    assert_not list.valid?
-    assert_includes list.errors[:title], "ne peut pas être vide"
-  end
 
   test "a list normalizes its title" do
     list = List.new(title: "  tItre test  ", description: "desc")

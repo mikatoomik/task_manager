@@ -59,6 +59,8 @@ fr:
       blank: "ne peut pas être vide"
       taken: "est déjà utilisé"
       invalid: "n'est pas valide"
+    unexpected: "Une erreur inattendue est survenue. Merci de réessayer plus tard."
+    incomplete_tasks: "Impossible de supprimer une liste avec des tâches incomplètes."
   flash:
     list_created: "Liste créée avec succès."
     list_updated: "Liste mise à jour avec succès."
