@@ -1,13 +1,13 @@
 <h1 class="m-2"><%= t("lists.index.title") %></h1>
-<% if @lists.any? %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-3 mb-4">
-    <% @lists.each do |list| %>
-      <turbo-frame id="list_card_<%= list.id %>">
-        <%= render "lists/card", list: list %>
-      </turbo-frame>
+  <div id="list_cards" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-3 mb-4">
+    <% if @lists.any? %>
+      <% @lists.each do |list| %>
+        <turbo-frame id="list_card_<%= list.id %>">
+          <%= render "lists/card", list: list %>
+        </turbo-frame>
+      <% end %>
     <% end %>
-    <turbo-frame id="new_list_card">
-      <%= render "lists/new_card" %>
-    </turbo-frame>
+      <turbo-frame id="new_list_card">
+        <%= render "lists/new_card" %>
+      </turbo-frame>
   </div>
-<% end %>

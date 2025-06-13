@@ -1,0 +1,31 @@
+<%= form_with(model: [list, task]) do |form| %>
+  <% if task.errors.any? %>
+    <div class="errors">
+      <h4><%= pluralize(task.errors.count, "erreur") %> :</h4>
+      <ul>
+        <% task.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div>
+    <%= form.label :title, Task.human_attribute_name(:title) %><br>
+    <%= form.text_field :title %>
+  </div>
+  <div>
+    <%= form.label :description, Task.human_attribute_name(:description) %><br>
+    <%= form.text_area :description %>
+  </div>
+  <div>
+    <%= form.label :priority, Task.human_attribute_name(:priority) %><br>
+    <%= form.select :priority, Task.priorities.keys.map { |k| [Task.human_attribute_name("priorities.#{k}"), k] } %>
+  </div>
+  <div>
+    <%= form.label :completed, Task.human_attribute_name(:completed) %>
+    <%= form.check_box :completed %>
+  </div>
+  <div>
+    <%= form.submit data: { turbo_frame: "new_task_form" } %>
+  </div>
+<% end %>

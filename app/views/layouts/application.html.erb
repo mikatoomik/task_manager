@@ -23,6 +23,10 @@
   </head>
 
   <body>
+    <turbo-frame id="flash">
+      <%= render "layouts/flash", notice: notice, alert: alert %>
+    </turbo-frame>
+
     <%= yield %>
   </body>
 </html>

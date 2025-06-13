@@ -1,0 +1,5 @@
+<turbo-frame id="edit_task_form_<%= task.id %>">
+  <h2><%= t("tasks.form.edit") %></h2>
+  <%= render "form", list: list, task: task %>
+  <%= link_to t("lists.show.back"), list_path(list), data: { turbo_frame: "list_card_#{list.id}" } %>
+</turbo-frame>

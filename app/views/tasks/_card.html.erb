@@ -1,0 +1,23 @@
+<% bg_class = if task.completed?
+  "bg-secondary-subtle"
+elsif task.priority == "high"
+  "bg-danger-subtle"
+elsif task.priority == "medium"
+  "bg-warning-subtle"
+else
+  "bg-success-subtle"
+end %>
+<div class="card min-width-250px flex-shrink-0 <%= bg_class %>" style="min-width:250px; max-width:300px; opacity:<%= task.completed? ? 0.6 : 1 %>;">
+  <div class="card-body">
+    <h6 class="card-title mb-1"><%= task.title %></h6>
+    <p class="card-text small"><%= task.description %></p>
+    <span class="badge bg-light text-dark"><%= I18n.t("activerecord.attributes.task.priorities.#{task.priority}") %></span>
+  </div>
+  <div class="card-footer d-flex justify-content-between align-items-center bg-transparent border-0">
+    <%= button_to (task.completed? ? "✅" : "❌"), list_toggle_list_task_path(@list, task), method: :patch, form: { data: { turbo: false } }, class: "btn btn-sm btn-outline-secondary" %>
+    <div>
+      <%= link_to t("lists.show.edit_task"), edit_list_task_path(@list, task), data: { turbo_frame: "task_card_#{task.id}" }, class: "btn btn-outline-primary btn-sm me-1" %>
+      <%= link_to t("lists.show.destroy_task"), list_task_path(@list, task), data: { turbo_method: :delete, turbo_confirm: t("lists.show.confirm_destroy_task") }, class: "btn btn-outline-danger btn-sm" %>
+    </div>
+  </div>
+</div>

@@ -3,23 +3,34 @@ class TasksController < ApplicationController
   before_action :set_task, only: [ :edit, :update, :destroy, :toggle ]
 
   def new
-    @task = @list.tasks.new
+    @task = @list.new
   end
 
   def create
     @task = @list.tasks.new(task_params)
     if @task.save
-      redirect_to list_path(@list), notice: t("tasks.notices.created")
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.append("list_tasks_#{@list.id}", partial: "tasks/card", locals: { list: @list, task: @task }) }
+        format.html
+      end
     else
       render :new
     end
   end
 
-  def edit; end
+  def edit
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace("task_card_#{@task.id}", partial: "tasks/form", locals: { task: @task }) }
+      format.html
+    end
+  end
 
   def update
     if @task.update(task_params)
-      redirect_to list_path(@list), notice: t("tasks.notices.updated")
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("task_card_#{@task.id}", partial: "tasks/card", locals: { list: @list, task: @task }) }
+        format.html
+      end
     else
       render :edit
     end
@@ -27,7 +38,10 @@ class TasksController < ApplicationController
 
   def destroy
     @task.destroy
-    redirect_to list_path(@list), notice: t("tasks.notices.destroyed")
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.remove("task_card_#{@task.id}") }
+        format.html { redirect_to list_path(@list), notice: t("tasks.notices.destroyed") }
+      end
   end
 
   def toggle

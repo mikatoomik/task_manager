@@ -1,0 +1,5 @@
+<% @tasks.each do |task| %>
+<turbo-frame id="task_card_<%= task.id %>">
+    <%= render "tasks/card", task: task %>
+</turbo-frame>
+<% end %>

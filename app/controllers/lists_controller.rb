@@ -5,41 +5,37 @@ class ListsController < ApplicationController
 
   def new
     @list = List.new
+    @list.tasks.build
   end
 
   def create
     @list = List.new(list_params)
+
     if @list.save
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("new_list_card", partial: "lists/card", locals: { list: @list }) }
-        format.html { redirect_to lists_path, notice: t("lists.notices.created") }
-      end
+      respond_to_create_success
     else
       @lists = List.all
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("new_list_card", partial: "lists/form", locals: { list: @list }) }
-        format.html { render :index }
-      end
+      @list.tasks.build if @list.tasks.empty?
+      respond_to_create_failure
     end
   end
 
   def show
     @list = List.includes(:tasks).find(params[:id])
     @tasks = @list.tasks
-    if params[:status].present?
-      @tasks = @tasks.public_send(params[:status]) if %w[incomplete completed].include?(params[:status])
-    end
-    if params[:priority].present?
-      @tasks = @tasks.by_priority(params[:priority])
-    end
+    @tasks = @tasks.public_send(params[:status]) if params[:status].present? && %w[incomplete completed].include?(params[:status])
+    @tasks = @tasks.by_priority(params[:priority]) if params[:priority].present?
+
     respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.replace("list_card_", partial: "lists/show", locals: { list: @list }) }
+      format.turbo_stream { render turbo_stream: turbo_stream.append("list_tasks_#{@list.id}", partial: "tasks/card", locals: { list: @list }) }
       format.html
     end
   end
 
   def edit
     @list = List.find(params[:id])
+    @list.tasks.build if @list.tasks.empty?
+
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.replace("list_card_", partial: "lists/form", locals: { list: @list }) }
       format.html
@@ -48,12 +44,14 @@ class ListsController < ApplicationController
 
   def update
     @list = List.find(params[:id])
+
     if @list.update(list_params)
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace("list_card_#{@list.id}", partial: "lists/card", locals: { list: @list }) }
         format.html { redirect_to @list, notice: t("lists.notices.updated") }
       end
     else
+      @list.tasks.build if @list.tasks.empty?
       respond_to do |format|
         format.turbo_stream { render turbo_stream: turbo_stream.replace("list_card_#{@list.id}", partial: "lists/form", locals: { list: @list }) }
         format.html { render :edit }
@@ -63,8 +61,9 @@ class ListsController < ApplicationController
 
   def destroy
     @list = List.find(params[:id])
+
     if @list.destroy
-      redirect_to lists_path, notice: t("lists.notices.destroyed")
+      redirect_to lists_path, notice: t("notices.destroyed")
     else
       redirect_to @list, alert: @list.errors.full_messages.to_sentence
     end
@@ -73,6 +72,31 @@ class ListsController < ApplicationController
   private
 
   def list_params
-    params.require(:list).permit(:title, :description)
+    params.require(:list).permit(
+      :title,
+      :description,
+      tasks_attributes: [ :id, :title, :description, :priority, :_destroy ]
+    )
+  end
+
+  def respond_to_create_success
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.prepend("list_cards", partial: "lists/card", locals: { list: @list }),
+          turbo_stream.replace("new_list_card", partial: "lists/new_card")
+        ]
+      end
+      format.html { redirect_to lists_path, notice: t("lists.notices.created") }
+    end
+  end
+
+  def respond_to_create_failure
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("new_list_card", partial: "lists/form", locals: { list: @list })
+      end
+      format.html { render :index }
+    end
   end
 end

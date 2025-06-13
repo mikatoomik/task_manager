@@ -7,6 +7,8 @@ class List < ApplicationRecord
 
   validates :title, presence: true, uniqueness: { case_sensitive: false }
 
+  scope :with_incomplete_tasks, -> { joins(:tasks).merge(Task.incomplete).distinct }
+
   def percent_complete
     return 0 if tasks.count == 0
     (tasks.completed.count.to_f / tasks.count * 100).round
@@ -20,4 +22,7 @@ class List < ApplicationRecord
       throw(:abort)
     end
   end
+
+  accepts_nested_attributes_for :tasks, allow_destroy: true, reject_if: ->(attrs) { attrs['title'].blank? }
+
 end
