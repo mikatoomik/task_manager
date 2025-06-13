@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class TaskTest < ActiveSupport::TestCase
-test "a task is invalid without a title" do
+  test "a task is invalid without a title" do
     task = Task.new(description: "desc", list: lists(:one))
     assert_not task.valid?
     assert_includes task.errors[:title], "can't be blank"

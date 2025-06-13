@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -13,7 +15,7 @@ Rails.application.routes.draw do
   root "lists#index"
 
   resources :lists do
-    resources :tasks, except: [ :show ]
+    resources :tasks, except: [:show]
     patch "tasks/:id/toggle", to: "tasks#toggle", as: :toggle_list_task
   end
 end

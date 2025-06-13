@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class ListsControllerTest < ActionDispatch::IntegrationTest
@@ -9,7 +11,6 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
     get lists_url
     assert_response :success
   end
-
 
   test "should get new" do
     get new_list_url
