@@ -80,7 +80,17 @@ class ListsController < ApplicationController
 
   def destroy
     @list = List.find(params[:id])
-    flash.now[:notice] = t("notices.destroyed") if @list.destroy
+    if @list.destroy
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to lists_path, notice: t("notices.destroyed") }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to @list, alert: @list.errors.full_messages.to_sentence }
+      end
+    end
   end
 
   private
