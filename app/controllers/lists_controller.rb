@@ -7,12 +7,20 @@ class ListsController < ApplicationController
 
   def show
     @list = List.includes(:tasks).find(params[:id])
-    @tasks = @list.tasks
+
+    @tasks = case params[:status]
+             when "completed"  then @list.tasks.completed
+             when "incomplete" then @list.tasks.incomplete
+             else @list.tasks
+             end
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.append("list_tasks_#{@list.id}", partial: "tasks/card",
-                                                                           locals: { list: @list })
+        render turbo_stream: turbo_stream.replace(
+          "list_tasks_#{@list.id}",
+          partial: "tasks/list",
+          locals: { tasks: @tasks }
+        )
       end
       format.html
     end

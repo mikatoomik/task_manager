@@ -25,7 +25,10 @@
     <%= form.label :completed, Task.human_attribute_name(:completed) %>
     <%= form.check_box :completed %>
   </div>
-  <div>
-    <%= form.submit data: { turbo_frame: "new_task_form" } %>
+  <div class="mt-3 d-flex justify-content-between">
+    <%= link_to t("actions.cancel"), list_path(list), data: { turbo_frame: "task_card_#{task.id}" }, class: "btn btn-outline-secondary btn-sm" %>
+
+    <%= form.submit class: "btn btn-primary btn-sm" %>
   </div>
+
 <% end %>

@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:edit, :update, :destroy, :toggle]
 
   def new
-    @task = @list.new
+    @task = @list.tasks.new
   end
 
   def edit
@@ -20,18 +20,28 @@ class TasksController < ApplicationController
 
   def create
     @task = @list.tasks.new(task_params)
+
     if @task.save
+      @new_task = @list.tasks.new # tâche vide pour le formulaire
       respond_to do |format|
         format.turbo_stream do
-          render turbo_stream: turbo_stream.append("list_tasks_#{@list.id}", partial: "tasks/card",
-                                                                             locals: { list: @list, task: @task })
+          render turbo_stream: [
+            turbo_stream.append("list_tasks_#{@list.id}", partial: "tasks/card", locals: { list: @list, task: @task }),
+            turbo_stream.replace("new_task_form", partial: "tasks/form", locals: { list: @list, task: @new_task })
+          ]
         end
-        format.html
+        format.html { redirect_to list_path(@list), notice: t("tasks.notices.created") }
       end
     else
-      render :new
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("new_task_form", partial: "tasks/form", locals: { list: @list, task: @task })
+        end
+        format.html { render :new }
+      end
     end
   end
+
 
   def update
     if @task.update(task_params)
@@ -55,9 +65,18 @@ class TasksController < ApplicationController
     end
   end
 
-  def toggle
-    @task.update(completed: !@task.completed)
-    redirect_to list_path(@list)
+    def toggle
+      @task.update_column(:completed, !@task.completed)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace("task_card_#{@task.id}", partial: "tasks/card", locals: { list: @list, task: @task }),
+            turbo_stream.replace("list_progress_#{@list.id}", partial: "lists/progress", locals: { list: @list })
+          ]
+        end
+        format.html { redirect_to list_path(@list) }
+    end
   end
 
   private

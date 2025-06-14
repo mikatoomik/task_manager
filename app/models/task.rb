@@ -5,8 +5,13 @@ class Task < ApplicationRecord
 
   belongs_to :list
 
-  validates :title, presence: true
-  validates :title, uniqueness: { scope: :list }
+  # validates :title, presence: true
+  # validates :title, uniqueness: { scope: :list }
+  validates :title, presence: true,
+                    uniqueness: {
+                      scope: :list_id,
+                      case_sensitive: false
+                    }, if: -> { new_record? || will_save_change_to_title? }
 
   scope :incomplete, -> { where(completed: false) }
   scope :completed, -> { where(completed: true) }
