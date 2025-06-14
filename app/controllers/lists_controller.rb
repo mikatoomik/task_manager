@@ -80,28 +80,31 @@ class ListsController < ApplicationController
 
   def destroy
     @list = List.find(params[:id])
-    if @list.destroy
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to lists_path, notice: t("notices.destroyed") }
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to @list, alert: @list.errors.full_messages.to_sentence }
+    @list.destroy
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html do
+        if @list.destroyed?
+          redirect_to lists_path, notice: t("notices.destroyed")
+        else
+          redirect_to @list, alert: @list.errors.full_messages.to_sentence
+        end
       end
     end
   end
 
+
   private
 
   def list_params
-    params.expect(
-      list: [:title,
-             :description,
-             { tasks_attributes: [:id, :title, :description, :priority, :_destroy] }]
+    params.require(:list).permit(
+      :title,
+      :description,
+      tasks_attributes: [:id, :title, :description, :priority, :_destroy]
     )
   end
+
 
   def respond_to_create_success
     respond_to do |format|
